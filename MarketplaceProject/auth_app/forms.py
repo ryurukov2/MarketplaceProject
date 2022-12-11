@@ -11,11 +11,12 @@ class SignUpForm(auth_forms.UserCreationForm):
     age = forms.IntegerField()
     city = forms.CharField(required=False)
     bio = forms.CharField(widget=forms.Textarea, required=False)
-
+    profile_picture = forms.ImageField(required=False)
+# @Babayaga123
     class Meta:
         model = UserModel
         fields = (UserModel.USERNAME_FIELD, 'password1', 'password2', 'first_name',
-                  'last_name', 'age', 'city', 'bio',)
+                  'last_name', 'age', 'city', 'bio', 'profile_picture',)
 
     # save with data for profile
     def save(self, commit=True):
@@ -27,6 +28,7 @@ class SignUpForm(auth_forms.UserCreationForm):
             age=self.cleaned_data['age'],
             bio=self.cleaned_data['bio'],
             city=self.cleaned_data['city'],
+            profile_picture=self.cleaned_data['profile_picture'],
             user=user,
         )
         if commit:

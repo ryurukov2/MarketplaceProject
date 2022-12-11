@@ -5,6 +5,8 @@ from django.views.generic import ListView, UpdateView
 from MarketplaceProject.auth_app.models import Profile
 from django.views.generic import DetailView
 
+from MarketplaceProject.web.forms import ProfileUpdateForm
+
 UserModel = get_user_model()
 
 
@@ -47,9 +49,9 @@ class ProfileDetailView(DetailView):
 
 class ProfileUpdateView(UpdateView):
     model = Profile
-    fields = ['first_name', 'last_name', 'age', 'city', 'bio']
+    # fields = ['first_name', 'last_name', 'age', 'city', 'bio', 'profile_picture', ]
+    form_class = ProfileUpdateForm
     template_name = 'web_app/profile_form.html'
-    permission_denied_template_name = 'web_app/profile_detail.html'
 
     def __init__(self):
         super().__init__()
