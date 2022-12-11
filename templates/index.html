@@ -1,0 +1,22 @@
+{% extends 'base/base.html' %}
+{#{% load static%}#}
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <title>It works!</title>
+    </head>
+    <body>
+    It works!
+    <ul>
+        {% for user in object_list %}
+            {% if user == request.user %}
+                <b>
+                    <li> {{ user.email }} </li>
+                </b>
+            {% else %}
+                <li> {{ user.email }} </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    </body>
+{% endblock %}

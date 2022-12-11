@@ -1,0 +1,21 @@
+{% extends 'base/base.html' %}
+{#{% load static%}#}
+{% block content %}
+    <h1>Profile Details</h1>
+
+    <p>{{ profile.first_name }} {{ profile.last_name }}</p>
+    <p>Age: {{ profile.age }}</p>
+    <p>Bio: {{ profile.bio }}</p>
+    <p>City: {{ profile.city }}</p>
+    {% if not user.is_authenticated %}
+
+    <p>Email: <a href="{% url 'login' %}">Log-in </a>to view.</p>
+        {% else %}
+            <p>Email: {{ app_user.email }}</p>
+    {% endif %}
+    <p>Date Joined: {{ app_user.date_joined }}</p>
+    {% if app_user == user %}
+        <a href="{% url 'profile_edit' profile.pk %}">Edit profile</a>
+    {% endif %}
+
+{% endblock %}

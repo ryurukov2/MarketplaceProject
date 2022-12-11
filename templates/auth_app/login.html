@@ -1,0 +1,22 @@
+{% extends 'base/base.html' %}
+{% load static%}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <title>Log In</title>
+</head>
+<body>
+<h1>Log In</h1>
+<form method="post" action="{% url 'login' %}">
+    {{ form.as_p }}
+    <button type="submit">Log In</button>
+    {% csrf_token %}
+</form>
+</body>
+{% endblock %}
+<styles>
+    a.unauth {
+    display: none;
+    color: red;
+}
+    </styles>
