@@ -4,8 +4,6 @@ from django.contrib.auth import admin as auth_admin, get_user_model
 from MarketplaceProject.auth_app.forms import SignUpForm
 
 UserModel = get_user_model()
-
-
 @admin.register(UserModel)
 class AppUserAdmin(auth_admin.UserAdmin):
     ordering = ('email',)
