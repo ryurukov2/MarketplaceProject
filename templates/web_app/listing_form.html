@@ -1,0 +1,17 @@
+{% extends 'base/base.html' %}
+{% load static%}
+{% block content %}
+
+<head>
+    <title>Create a New Listing</title>
+</head>
+<body>
+    <h1>Create a New Listing</h1>
+
+    <form method="post" action="{% url 'listing new'%}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+</body>
+{% endblock %}

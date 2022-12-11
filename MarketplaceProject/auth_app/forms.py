@@ -12,7 +12,8 @@ class SignUpForm(auth_forms.UserCreationForm):
     city = forms.CharField(required=False)
     bio = forms.CharField(widget=forms.Textarea, required=False)
     profile_picture = forms.ImageField(required=False)
-# @Babayaga123
+
+    # @Babayaga123
     class Meta:
         model = UserModel
         fields = (UserModel.USERNAME_FIELD, 'password1', 'password2', 'first_name',
@@ -35,3 +36,9 @@ class SignUpForm(auth_forms.UserCreationForm):
             profile.save()
 
         return user
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['first_name', 'last_name', 'age', 'city', 'bio', 'profile_picture']

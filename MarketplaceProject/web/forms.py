@@ -1,8 +1,11 @@
 from django import forms
-from MarketplaceProject.auth_app.models import Profile
+from MarketplaceProject.web.models import Listing
 
 
-class ProfileUpdateForm(forms.ModelForm):
+
+
+
+class ListingForm(forms.ModelForm):
     class Meta:
-        model = Profile
-        fields = ['first_name', 'last_name', 'age', 'city', 'bio', 'profile_picture']
+        model = Listing
+        fields = ['title', 'price', 'description', 'category']
