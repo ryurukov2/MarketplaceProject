@@ -8,14 +8,23 @@
     <body>
     It works!
     <ul>
-        {% for user in object_list %}
-            {% if user == request.user %}
-                <b>
-                    <li> {{ user.email }} </li>
-                </b>
+        {% for listing in object_list %}
+            {% if listing.seller.user == request.user %}
+            <b>
+                <li> {{ listing.title }} {{ listing.price }} </li>
+                {{ listing.seller.first_name }}
+                from {{ listing.seller.city }}
+                <a href="{% url 'listing detail' pk=listing.id %}">View</a>
+            <a href="{% url 'listing edit' pk=listing.id %}">Edit</a>
+            </b>
             {% else %}
-                <li> {{ user.email }} </li>
+            <li> {{ listing.title }} {{ listing.price }} </li>
+                {{ listing.seller.first_name }}
+                from {{ listing.seller.city }}
+                <a href="{% url 'listing detail' pk=listing.id %}">View</a>
             {% endif %}
+
+
         {% endfor %}
     </ul>
     </body>

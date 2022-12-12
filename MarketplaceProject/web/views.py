@@ -1,9 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
 
-from django.views import View
-from django.views.generic import ListView, UpdateView, CreateView
+from django.views.generic import ListView, UpdateView, CreateView, DeleteView
 from MarketplaceProject.auth_app.models import Profile
 from django.views.generic import DetailView
 
@@ -14,18 +14,6 @@ UserModel = get_user_model()
 
 
 # LoginRequiredMixin
-class UsersListView(ListView):
-    model = UserModel
-    template_name = 'index.html'
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        print(self.request.user.__class__)
-        return context
-
-
-# LoginRequiredMixin,
-
 
 
 class ListingCreateView(LoginRequiredMixin, CreateView):
@@ -75,7 +63,7 @@ class ListingDetailView(DetailView):
 #             return redirect(listing.get_absolute_url())
 #         return render(request, 'web_app/edit_listing.html', {'form': form, 'listing': listing})
 
-class EditListingView(UpdateView):
+class ListingEditView(UpdateView):
     model = Listing
     # fields = ['first_name', 'last_name', 'age', 'city', 'bio', 'profile_picture', ]
     form_class = ListingForm
@@ -94,3 +82,13 @@ class EditListingView(UpdateView):
 
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
+
+
+class ListingListView(ListView):
+    model = Listing
+    template_name = 'index.html'
+
+
+class ListingDeleteView(DeleteView):
+    model = Listing
+    success_url = reverse_lazy('index')
