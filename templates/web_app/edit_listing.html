@@ -1,14 +1,15 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block content %}
-<form method="POST">
-    {% csrf_token %}
-    <table>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
         {{ form.as_p }}
-    </table>
-
-    <button type="submit">Save</button>
-</form>
+        {{ product_images.management_form }}
+        {% for product_image_form in product_images|slice:"3" %}
+            {{ product_image_form.as_p }}
+        {% endfor %}
+        <button type="submit">Save</button>
+    </form>
     <form action="{% url 'listing delete' pk=object.id %}" method="post">
     {% csrf_token %}
         <button type="submit">DELETE LISTING</button>

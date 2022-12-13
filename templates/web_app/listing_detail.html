@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
     <head>
-    <link rel="stylesheet" href="{% static 'css/listing_detail.css' %}">
+        <link rel="stylesheet" href="{% static 'css/listing_detail.css' %}">
     </head>
 
     {#    <h1>{{ object.title }}</h1>#}
@@ -32,6 +32,9 @@
         <p>Seller: {{ object.seller.first_name }}</p>
         <p>Created: {{ object.created_at }}</p>
         <p>Updated: {{ object.updated_at }}</p>
+        {% for image in images %}
+            <img src="{% static image.product_photos %}" alt="Photo">
+        {% endfor %}
     </div>
 
     <div class="profile-details">
@@ -46,8 +49,8 @@
                 <p>Email: {{ object.seller.user.email }}</p>
             {% endif %}
             {% if user == object.seller.user %}
-            <a href="{% url 'listing edit' pk=object.id%}">Edit listing</a>
-        {% endif %}
+                <a href="{% url 'listing edit' pk=object.id %}">Edit listing</a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

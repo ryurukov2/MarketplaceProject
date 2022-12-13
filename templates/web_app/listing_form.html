@@ -8,10 +8,42 @@
 <body>
     <h1>Create a New Listing</h1>
 
-    <form method="post" action="{% url 'listing new'%}">
+{#    <form method="post" action="{% url 'listing new'%}" enctype="multipart/form-data">#}
+{#        {% csrf_token %}#}
+{#        {{ form.as_ul}}#}
+{#        <input type="submit" value="Submit" />#}
+{#    </form>#}
+
+{#<form method="post" action="{% url 'listing new'%}" enctype="multipart/form-data">#}
+{#    <label for="title">Title:</label><br>#}
+{#    {{ form.title }}<br>#}
+{##}
+{#    <label for="price">Price:</label><br>#}
+{#    {{ form.price }}<br>#}
+{##}
+{#    <label for="description">Description:</label><br>#}
+{#    {{ form.description }}<br>#}
+{##}
+{#    <label for="category">Category:</label><br>#}
+{#    {{ form.category }}<br>#}
+{##}
+{#    <input type="file" id="product_photos" name="product_photos" multiple><br>#}
+{#    <br>#}
+{#{% csrf_token %}#}
+{#    <input type="submit" value="Submit">#}
+{#</form>#}
+
+
+   <h1>Create/Update Listing</h1>
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Submit" />
+        {{ product_images.management_form }}
+        {% for product_image_form in product_images %}
+            {{ product_image_form.as_p }}
+        {% endfor %}
+        <button type="submit">Save</button>
     </form>
+
 </body>
 {% endblock %}

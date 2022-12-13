@@ -37,3 +37,6 @@ class Listing(models.Model):
         return reverse('listing detail', kwargs={'pk': self.pk})
 
 
+class ProductImage(models.Model):
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
+    product_photos = models.ImageField(upload_to='product_photos/')
