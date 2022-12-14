@@ -12,6 +12,50 @@ from MarketplaceProject.web.models import Listing
 
 UserModel = get_user_model()
 
+# Create listing view
+class ListingImageUploadView(CreateView):
+    model = Listing
+    form_class = ListingWithImagesForm
+    template_name = 'web_app/listing_form.html'
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data['product_images'] = ProductImageFormset(self.request.POST, self.request.FILES)
+        else:
+            data['product_images'] = ProductImageFormset()
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        form.instance.seller = Profile.objects.get(user_id=self.request.user.id)
+        product_images = context['product_images']
+        self.object = form.save()
+        if product_images.is_valid():
+            product_images.instance = self.object
+            product_images.save()
+        return super().form_valid(form)
+
+
+# class ListingEditView(UpdateView):
+#     model = Listing
+#     # fields = ['first_name', 'last_name', 'age', 'city', 'bio', 'profile_picture', ]
+#     form_class = ListingWithImagesForm
+#     template_name = 'web_app/edit_listing.html'
+#
+#     def __init__(self):
+#         super().__init__()
+#         self.object = None
+#
+#     def get(self, request, *args, **kwargs):
+#         self.object = self.get_object()
+#
+#         # Check if the logged-in user is the owner of the profile that is being edited
+#         if self.object.seller.user != request.user:
+#             return redirect('listing detail', pk=self.object.id)
+#
+#         context = self.get_context_data(object=self.object)
+#         return self.render_to_response(context)
 
 # LoginRequiredMixin
 
@@ -90,31 +134,14 @@ class ListingDetailView(DetailView):
 #             return redirect(listing.get_absolute_url())
 #         return render(request, 'web_app/edit_listing.html', {'form': form, 'listing': listing})
 
-class ListingEditView(UpdateView):
-    model = Listing
-    # fields = ['first_name', 'last_name', 'age', 'city', 'bio', 'profile_picture', ]
-    form_class = ListingWithImagesForm
-    template_name = 'web_app/edit_listing.html'
 
-    def __init__(self):
-        super().__init__()
-        self.object = None
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-
-        # Check if the logged-in user is the owner of the profile that is being edited
-        if self.object.seller.user != request.user:
-            return redirect('listing detail', pk=self.object.id)
-
-        context = self.get_context_data(object=self.object)
-        return self.render_to_response(context)
 
 
 class ListingImageUpdateView(UpdateView):
     model = Listing
     form_class = ListingWithImagesForm
     template_name = 'web_app/edit_listing.html'
+    MAXIMUM_IMAGES = 5
 
     def __init__(self):
         super().__init__()
@@ -158,25 +185,4 @@ class ListingDeleteView(DeleteView):
     success_url = reverse_lazy('index')
 
 
-class ListingImageUploadView(CreateView):
-    model = Listing
-    form_class = ListingWithImagesForm
-    template_name = 'web_app/listing_form.html'
 
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        if self.request.POST:
-            data['product_images'] = ProductImageFormset(self.request.POST, self.request.FILES)
-        else:
-            data['product_images'] = ProductImageFormset()
-        return data
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        form.instance.seller = Profile.objects.get(user_id=self.request.user.id)
-        product_images = context['product_images']
-        self.object = form.save()
-        if product_images.is_valid():
-            product_images.instance = self.object
-            product_images.save()
-        return super().form_valid(form)

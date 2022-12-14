@@ -2,7 +2,7 @@ from django.urls import path
 
 from MarketplaceProject.auth_app.views import ProfileDetailView, ProfileUpdateView
 from MarketplaceProject.web.views import ListingListView, \
-    ListingDetailView, ListingEditView, ListingDeleteView, ListingImageUploadView, ListingImageUpdateView
+    ListingDetailView, ListingDeleteView, ListingImageUploadView, ListingImageUpdateView
 
 urlpatterns = [
     path('', ListingListView.as_view(), name='index'),
