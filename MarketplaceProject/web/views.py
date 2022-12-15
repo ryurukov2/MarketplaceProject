@@ -1,16 +1,19 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy, reverse
+from django.utils import timezone
 
 from django.views.generic import ListView, UpdateView, CreateView, DeleteView
 from MarketplaceProject.auth_app.models import Profile
 from django.views.generic import DetailView
 
 from MarketplaceProject.web.forms import ListingForm, ListingWithImagesForm, ProductImageFormset
-from MarketplaceProject.web.models import Listing
+from MarketplaceProject.web.models import Listing, Message, Thread
 
 UserModel = get_user_model()
+
 
 # Create listing view
 class ListingImageUploadView(CreateView):
@@ -135,8 +138,6 @@ class ListingDetailView(DetailView):
 #         return render(request, 'web_app/edit_listing.html', {'form': form, 'listing': listing})
 
 
-
-
 class ListingImageUpdateView(UpdateView):
     model = Listing
     form_class = ListingWithImagesForm
@@ -184,5 +185,49 @@ class ListingDeleteView(DeleteView):
     model = Listing
     success_url = reverse_lazy('index')
 
+    ########
 
 
+def send_message(request, pk):
+    sender_id = request.user.id
+    message_body = request.POST.get('message_body')
+    timestamp = timezone.now()
+
+    try:
+        sender = Profile.objects.get(pk=sender_id)
+        recipient = Profile.objects.get(pk=pk)
+    except Profile.DoesNotExist:
+        return HttpResponse('Profile matching query does not exist.')
+    thread, created = Thread.objects.get_or_create(sender, recipient)
+    message = Message(
+        sender=sender,
+        recipient=recipient,
+        message_body=message_body,
+        timestamp=timestamp,
+        thread=thread
+    )
+    message.save()
+
+    return HttpResponseRedirect(reverse('message_sent'))
+
+
+def message_form(request, pk):
+    return render(request, 'web_app/message_form.html', context={'pk': pk})
+
+
+def message_sent(request):
+    return render(request, 'web_app/message_sent.html')
+
+
+def view_threads(request):
+    profile = Profile.objects.get(user_id=request.user.id)
+    threads = Thread.objects.filter(user_1=profile) | Thread.objects.filter(user_2=profile)
+    for thread in threads:
+        thread.messages.set(thread.messages.all().order_by('-id'))
+    return render(request, 'web_app/view_threads.html', {'threads': threads})
+
+
+def view_thread_messages(request, pk):
+    profile = Profile.objects.get(user_id=request.user.id)
+    thread = Thread.objects.get(id=pk)
+    return render(request, 'web_app/view_messages.html', {'thread': thread})

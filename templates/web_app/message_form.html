@@ -1,0 +1,14 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<form action="{% url 'send_message' pk=pk %}" method="POST">
+    {% csrf_token %}
+{#    <label for="recipient_id">Recipient:</label>#}
+{#    <input type="text" id="recipient_id" name="recipient_id">#}
+    <label for="message_body">Message:</label>
+    <textarea id="message_body" name="message_body"></textarea>
+    <input type="hidden" name="timestamp" value="{{ timestamp }}">
+    <input type="submit" value="Send">
+</form>
+
+{% endblock %}

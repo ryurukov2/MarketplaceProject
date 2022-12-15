@@ -1,10 +1,10 @@
-from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
 from MarketplaceProject.auth_app.models import Profile
+from MarketplaceProject.web.managers import ThreadManager
 
 GeneralUser = get_user_model()
 
@@ -42,5 +42,43 @@ class ProductImage(models.Model):
     product_photos = models.ImageField(upload_to='product_photos/')
 
 
+class Thread(models.Model):
+    objects = ThreadManager()
+    user_1 = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+        related_name='user_1_threads'
+    )
+    user_2 = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+        related_name='user_2_threads'
+    )
+    timestamp = models.DateTimeField(auto_now=True)
 
 
+class Message(models.Model):
+    sender = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+        related_name='sent_messages'
+    )
+    recipient = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+        related_name='received_messages'
+    )
+    message_body = models.TextField(blank=False, null=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    thread = models.ForeignKey(
+        Thread,
+        on_delete=models.CASCADE,
+        related_name='messages',
+        blank=False,
+        null=False
+    )
+
+# class ListingStatus(models.Model):
+#     pass
+# TODO, maybe rename to "notifications" and include price movements or listing status change notifs.
+#  If no further implementation, just use a choice field in Listing

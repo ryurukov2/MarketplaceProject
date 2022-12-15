@@ -1,0 +1,31 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+
+  {% for thread in threads %}
+    <h3>Conversation with {% if user.id == thread.user_1.user_id %}{{ thread.user_2.first_name }} {{ thread.user_2.last_name }}
+    {% else %}{{ thread.user_1.first_name }} {{ thread.user_1.last_name }} {% endif %}</h3>
+{#    <p>Last message: {{ thread.timestamp }}</p>#}
+    <ul>
+        {% for message in thread.messages.all|slice:"1"%}
+            <li>
+                <p><a href="{% url 'view_messages' pk=thread.id %}">{{ message.sender.first_name }} {{ message.sender.last_name }}: {{ message.message_body }}</a></p>
+                <p>Sent: {{ message.timestamp }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% endfor %}
+
+{#  {% for thread in threads2 %}#}
+{#    <h3>Conversation with {{ thread.user_1.first_name }} {{ thread.user_1.last_name }}</h3>#}
+{#    <p>Last message: {{ thread.timestamp }}</p>#}
+{#    <ul>#}
+{#        {% for message in thread.messages.all %}#}
+{#            <li>#}
+{#                <p>{{ message.sender.first_name }} {{ message.sender.last_name }}: {{ message.message_body }}</p>#}
+{#                <p>Sent: {{ message.timestamp }}</p>#}
+{#            </li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
+{#{% endfor %}#}
+{% endblock %}

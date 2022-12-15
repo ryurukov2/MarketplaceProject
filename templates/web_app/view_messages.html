@@ -1,0 +1,21 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <ul>
+        {% for message in thread.messages.all %}
+            <li>
+                {% if message.sender.user_id == user.id %}
+                    <p><b>{{ message.sender.first_name }} {{ message.sender.last_name }}: {{ message.message_body }}</b>
+                    </p>
+                    <p>Sent: {{ message.timestamp }}</p>
+                {% else %}
+                    <p>{{ message.sender.first_name }} {{ message.sender.last_name }}: {{ message.message_body }}</p>
+                    <p>Sent: {{ message.timestamp }}</p>
+                {% endif %}
+
+            </li>
+        {% endfor %}
+    </ul>
+
+
+{% endblock %}

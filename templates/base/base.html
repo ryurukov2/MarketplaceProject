@@ -6,6 +6,7 @@
     <a href="{% url 'login' %}" class='unauth'>LOGIN</a>
     <a href="{% url 'sign up' %}" class='unauth'>REGISTER</a>
 {% else %}
+    <a href="{% url 'view_threads' %}" class='authd'>INBOX</a>
     <a href="{% url 'listing new' %}" class='authd'>NEW LISTING</a>
     <a href="{% url 'profile detail' pk=request.user.pk %}" class='authd'>PROFILE</a>
     <a href="{% url 'sign out' %}" class='authd'>LOG OUT</a>
