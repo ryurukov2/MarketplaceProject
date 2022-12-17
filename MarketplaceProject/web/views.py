@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect, render
@@ -16,7 +17,7 @@ UserModel = get_user_model()
 
 
 # Create listing view
-class ListingImageUploadView(CreateView):
+class ListingImageUploadView(LoginRequiredMixin, CreateView):
     model = Listing
     form_class = ListingWithImagesForm
     template_name = 'web_app/listing_form.html'
@@ -116,7 +117,7 @@ class ListingDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user'] = self.request.user
+        # context['user'] = self.request.user
         listing = context['listing']
         images = listing.productimage_set.all()
         context['images'] = images
@@ -142,7 +143,6 @@ class ListingImageUpdateView(UpdateView):
     model = Listing
     form_class = ListingWithImagesForm
     template_name = 'web_app/edit_listing.html'
-    MAXIMUM_IMAGES = 5
 
     def __init__(self):
         super().__init__()
@@ -180,8 +180,16 @@ class ListingListView(ListView):
     model = Listing
     template_name = 'index.html'
 
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     # context['user'] = self.request.user
+    #     listing = context['listing']
+    #     images = listing.productimage_set.first()
+    #     context['images'] = images
+    #     return context
 
-class ListingDeleteView(DeleteView):
+
+class ListingDeleteView(LoginRequiredMixin, DeleteView):
     model = Listing
     success_url = reverse_lazy('index')
 
@@ -208,26 +216,62 @@ def send_message(request, pk):
     )
     message.save()
 
-    return HttpResponseRedirect(reverse('message_sent'))
+    return redirect('view_messages', pk=recipient.pk)
 
 
+@login_required
 def message_form(request, pk):
+    try:
+        Profile.objects.get(pk=pk)
+    except Profile.DoesNotExist:
+        return redirect('index')
+    if request.user.id == pk:
+        return redirect('profile detail', pk=pk)
     return render(request, 'web_app/message_form.html', context={'pk': pk})
 
 
-def message_sent(request):
-    return render(request, 'web_app/message_sent.html')
-
-
+# def message_sent(request):
+#     return render(request, 'web_app/message_sent.html')
+# 0 1 2 3
+#
+@login_required
 def view_threads(request):
     profile = Profile.objects.get(user_id=request.user.id)
-    threads = Thread.objects.filter(user_1=profile) | Thread.objects.filter(user_2=profile)
-    for thread in threads:
-        thread.messages.set(thread.messages.all().order_by('-id'))
+    threads = list(Thread.objects.filter(user_1=profile) | Thread.objects.filter(user_2=profile))
+    _ = 0
+    for i in range(len(threads)):
+        if not Message.objects.filter(thread=threads[_].id):
+            threads[_].delete()
+            threads.pop(_)
+            _ -= 1
+
+        _ += 1
     return render(request, 'web_app/view_threads.html', {'threads': threads})
 
 
+@login_required
 def view_thread_messages(request, pk):
-    profile = Profile.objects.get(user_id=request.user.id)
-    thread = Thread.objects.get(id=pk)
-    return render(request, 'web_app/view_messages.html', {'thread': thread})
+    try:
+        Profile.objects.get(pk=pk)
+    except Profile.DoesNotExist:
+        return redirect('view_threads')
+    # if request.user.id == pk:
+    #     return redirect('profile detail', pk=pk)
+    sender = Profile.objects.get(user_id=request.user.id)
+    recipient = Profile.objects.get(user_id=pk)
+    thread, created = Thread.objects.get_or_create(sender, recipient)
+    if thread.user_1_id == request.user.id:
+        receiver_id = thread.user_2_id
+    else:
+        receiver_id = thread.user_1_id
+    return render(request, 'web_app/view_messages.html', {'thread': thread,
+                                                          'pk': receiver_id})
+
+
+def listings_search(request):
+    query = request.GET.get('q')
+    listings = None
+    if query:
+        listings = Listing.objects.all().filter(title__icontains=query) | Listing.objects.all().filter(description__icontains=query)
+
+    return render(request, 'web_app/search_results.html', {'listings': listings})

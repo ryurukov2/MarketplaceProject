@@ -20,7 +20,6 @@ class SignUpView(views.CreateView):
     #     return context
     def form_valid(self, form):
         result = super().form_valid(form)
-
         login(self.request, self.object)
         return result
 
@@ -30,7 +29,9 @@ class SignInView(auth_views.LoginView):
     success_url = reverse_lazy('index')
 
     def get_success_url(self):
-        if self.success_url:
+        if self.request.POST.get('next'):
+            return self.request.POST.get('next')
+        elif self.success_url:
             return self.success_url
 
         return self.get_redirect_url() or self.get_default_redirect_url()
@@ -75,8 +76,6 @@ class ProfileUpdateView(UpdateView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-
-        # Check if the logged-in user is the owner of the profile that is being edited
         if self.object.user != request.user:
             return redirect('profile detail', pk=self.object.user_id)
 

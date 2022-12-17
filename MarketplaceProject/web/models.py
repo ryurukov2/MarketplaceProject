@@ -33,11 +33,16 @@ class Listing(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.title
+
     def get_absolute_url(self):
         return reverse('listing detail', kwargs={'pk': self.pk})
 
 
 class ProductImage(models.Model):
+    class Meta:
+        ordering = ['id']
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
     product_photos = models.ImageField(upload_to='product_photos/')
 
@@ -58,6 +63,9 @@ class Thread(models.Model):
 
 
 class Message(models.Model):
+    class Meta:
+        ordering = ['timestamp']
+
     sender = models.ForeignKey(
         Profile,
         on_delete=models.CASCADE,
@@ -77,8 +85,3 @@ class Message(models.Model):
         blank=False,
         null=False
     )
-
-# class ListingStatus(models.Model):
-#     pass
-# TODO, maybe rename to "notifications" and include price movements or listing status change notifs.
-#  If no further implementation, just use a choice field in Listing

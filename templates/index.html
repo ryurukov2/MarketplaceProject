@@ -1,24 +1,32 @@
 {% extends 'base/base.html' %}
-{#{% load static%}#}
+{% load static %}
 {% block content %}
     <head>
         <meta charset="UTF-8">
         <title>It works!</title>
     </head>
     <body>
-    It works!
+    <form method="GET" action="{% url 'search' %}">
+        <label>
+            <input type="text" name="q" placeholder="Search listings">
+        </label>
+        <button type="submit">Search</button>
+    </form>
     <ul>
         {% for listing in object_list %}
+            {% with listing.productimage_set.first as product_image %}
+                <a href="{% url 'listing detail' pk=listing.id %}"><img class='image_preview' src=" {% static product_image.product_photos %}" alt=""></a>
+            {% endwith %}
             {% if listing.seller.user == request.user %}
-            <b>
-                <li> {{ listing.title }} {{ listing.price }} </li>
-                {{ listing.seller.first_name }}
-                from {{ listing.seller.city }}
-                <a href="{% url 'listing detail' pk=listing.id %}">View</a>
-            <a href="{% url 'listing edit' pk=listing.id %}">Edit</a>
-            </b>
+                <b>
+                    <li> {{ listing.title }} {{ listing.price }} </li>
+                    {{ listing.seller.first_name }}
+                    from {{ listing.seller.city }}
+                    <a href="{% url 'listing detail' pk=listing.id %}">View</a>
+                    <a href="{% url 'listing edit' pk=listing.id %}">Edit</a>
+                </b>
             {% else %}
-            <li> {{ listing.title }} {{ listing.price }} </li>
+                <li> {{ listing.title }} {{ listing.price }} </li>
                 {{ listing.seller.first_name }}
                 from {{ listing.seller.city }}
                 <a href="{% url 'listing detail' pk=listing.id %}">View</a>

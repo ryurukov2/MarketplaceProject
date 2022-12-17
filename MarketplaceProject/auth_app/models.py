@@ -49,5 +49,7 @@ class Profile(models.Model):
 
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
 
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
     def get_absolute_url(self):
         return reverse('profile detail', kwargs={'pk': self.pk})

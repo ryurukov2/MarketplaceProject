@@ -3,7 +3,7 @@ from django.urls import path
 from MarketplaceProject.auth_app.views import ProfileDetailView, ProfileUpdateView
 from MarketplaceProject.web.views import ListingListView, \
     ListingDetailView, ListingDeleteView, ListingImageUploadView, ListingImageUpdateView, message_form, view_threads, \
-    send_message, message_sent, view_thread_messages
+    send_message, view_thread_messages, listings_search
 
 urlpatterns = [
     path('', ListingListView.as_view(), name='index'),
@@ -15,8 +15,8 @@ urlpatterns = [
     path('listing_remove/<int:pk>/', ListingDeleteView.as_view(), name='listing delete'),
     path('message/form/<int:pk>/', message_form, name='message_form'),
     path('message/send/<int:pk>/', send_message, name='send_message'),
-    path('message/sent/', message_sent, name='message_sent'),
     path('messages/', view_threads, name='view_threads'),
     path('messages/thread/<int:pk>/', view_thread_messages, name='view_messages'),
+    path('search/', listings_search, name='search'),
 
 ]

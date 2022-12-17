@@ -8,15 +8,12 @@
 <body>
 <h1>Log In</h1>
 <form method="post" action="{% url 'login' %}">
-    {{ form.as_p }}
+    {{ form }}
+    <input type="hidden" name="next" value="{{ request.GET.next }}"/>
     <button type="submit">Log In</button>
     {% csrf_token %}
 </form>
+<p>No profile? <a href="{% url 'sign up' %}">Sign up</a> now!</p>
 </body>
 {% endblock %}
-<styles>
-    a.unauth {
-    display: none;
-    color: red;
-}
-    </styles>
+
