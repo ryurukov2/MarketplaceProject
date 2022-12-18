@@ -180,14 +180,6 @@ class ListingListView(ListView):
     model = Listing
     template_name = 'index.html'
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     # context['user'] = self.request.user
-    #     listing = context['listing']
-    #     images = listing.productimage_set.first()
-    #     context['images'] = images
-    #     return context
-
 
 class ListingDeleteView(LoginRequiredMixin, DeleteView):
     model = Listing
@@ -230,9 +222,6 @@ def message_form(request, pk):
     return render(request, 'web_app/message_form.html', context={'pk': pk})
 
 
-# def message_sent(request):
-#     return render(request, 'web_app/message_sent.html')
-# 0 1 2 3
 #
 @login_required
 def view_threads(request):
@@ -272,6 +261,7 @@ def listings_search(request):
     query = request.GET.get('q')
     listings = None
     if query:
-        listings = Listing.objects.all().filter(title__icontains=query) | Listing.objects.all().filter(description__icontains=query)
+        listings = Listing.objects.all().filter(title__icontains=query) | Listing.objects.all().filter(
+            description__icontains=query)
 
     return render(request, 'web_app/search_results.html', {'listings': listings})

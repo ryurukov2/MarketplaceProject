@@ -1,0 +1,49 @@
+.page-title {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+}
+
+.profile-picture {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.profile-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-name {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.profile-age, .profile-bio, .profile-city, .profile-email, .profile-date {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.btn {
+    width: 40%;
+    text-align: center;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4caf50;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #3e8e41;
+}

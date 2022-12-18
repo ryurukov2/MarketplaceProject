@@ -5,53 +5,36 @@
         <link rel="stylesheet" href="{% static 'css/listing_detail.css' %}">
         <title>{{ listing.title }}</title>
     </head>
-
-    {#    <h1>{{ object.title }}</h1>#}
-    {#    <p>Price: {{ object.price }}</p>#}
-    {#    <p>Description: {{ object.description }}</p>#}
-    {#    <p>Category: {{ object.category.name }}</p>#}
-    {#    <p>Seller: {{ object.seller.first_name }}</p>#}
-    {#    <p>Created: {{ object.created_at }}</p>#}
-    {#    <p>Updated: {{ object.updated_at }}</p>#}
-    {#    <h2>Seller's Profile</h2>#}
-    {#    <p>Profile Picture: <img src="{% static object.seller.profile_picture %}" alt="Profile Picture"></p>#}
-    {#    <p>First Name: {{ object.seller.first_name }}</p>#}
-    {##}
-    {#    {% if not user.is_authenticated %}#}
-    {##}
-    {#    <p>Email: <a href="{% url 'login' %}">Log-in </a>to view.</p>#}
-    {#        {% else %}#}
-    {#            <p>Email: {{ object.seller.user.email }}</p>#}
-    {#    {% endif %}#}
-    {#    <p>City: {{ object.seller.city }}</p>#}
-
-    <div class="listing-details">
-        <h1>{{ object.title }}</h1>
-        <p class="price">Price: {{ object.price }}</p>
-        <p>Description: {{ object.description }}</p>
-        <p>Category: {{ object.category.name }}</p>
-        <p>Seller: {{ object.seller.first_name }}</p>
-        <p>Created: {{ object.created_at }}</p>
-        <p>Updated: {{ object.updated_at }}</p>
-        {% for image in images %}
-            <img src="{% static image.product_photos %}" alt="Photo">
-        {% endfor %}
-    </div>
-
-    <div class="profile-details">
-        <a href="{% url 'profile detail' pk=object.seller_id %}"><img src="{% static object.seller.profile_picture %}" alt="Profile Picture"></a>
-        <div>
-            <p>First Name: {{ object.seller.first_name }}</p>
-            <p>City: {{ object.seller.city }}</p>
-            {% if not user.is_authenticated %}
-
-                <p>Email: <a href="{% url 'login' %}">Log-in </a>to view.</p>
-            {% else %}
-                <p>Email: {{ object.seller.user.email }}</p>
-            {% endif %}
+    <div class="container">
+        <div class="listing-details">
+            <h1>{{ object.title }}</h1>
+            <p class="price">Price: {{ object.price }}</p>
+            <p>Category: {{ object.category.name }}</p>
+            <p>Created: {{ object.created_at }}</p>
+            <p>Updated: {{ object.updated_at }}</p>
+            {% for image in images %}
+                <img src="{% static image.product_photos %}" alt="Photo" class="product-photo">
+            {% endfor %}
+            <p>Description: {{ object.description }}</p>
             {% if user == object.seller.user %}
-                <a href="{% url 'listing edit' pk=object.id %}">Edit listing</a>
+                <a href="{% url 'listing edit' pk=object.id %}" class="edit-button">Edit listing</a>
             {% endif %}
+        </div>
+        <div class="profile-details">
+            <h1>Seller details:</h1>
+            <a href="{% url 'profile detail' pk=object.seller_id %}"><img
+                    src="{% static object.seller.profile_picture %}" alt="Profile Picture" class="profile-pic"></a>
+            <div>
+                <h2 class="seller-name">{{ object.seller.first_name }}</h2>
+                <p>City: {{ object.seller.city }}</p>
+                {% if not user.is_authenticated %}
+                    <p>Email: <a href="{% url 'login' %}">Log-in </a>to view.</p>
+                {% else %}
+                    <p>Email: {{ object.seller.user.email }}</p>
+                {% endif %}
+
+            </div>
         </div>
     </div>
 {% endblock %}
+

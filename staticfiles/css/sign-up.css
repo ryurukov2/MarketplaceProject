@@ -30,13 +30,13 @@ button {
 }
 
 button {
-  background-color: #ADD8E6; /* light blue */
+  background-color: #4caf50;
   color: white;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #93c3d3;
+  background-color: #3e8e41;
 }
 
 .unauth {

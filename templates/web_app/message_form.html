@@ -1,6 +1,10 @@
 {% load static %}
 {% block content %}
-<form action="{% url 'send_message' pk=pk %}" method="POST">
+    <head>
+        <title>Messages</title>
+        <link rel="stylesheet" href="{% static 'css/message_form.css' %}">
+    </head>
+<form class="message-form" action="{% url 'send_message' pk=pk %}" method="POST">
     {% csrf_token %}
     <label for="message_body">Message:</label>
     <textarea id="message_body" name="message_body"></textarea>

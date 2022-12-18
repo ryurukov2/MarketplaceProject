@@ -1,26 +1,29 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block content %}
-    <h1>Profile Details</h1>
-    <p>Profile picture: <img src="{% static profile.profile_picture %}" alt="Profile Picture"</p>
-    <p>{{ profile.first_name }} {{ profile.last_name }}</p>
-    <p>Age: {{ profile.age }}</p>
-    <p>Bio: {{ profile.bio }}</p>
-    <p>City: {{ profile.city }}</p>
-    {% if not user.is_authenticated %}
-
-        <p>Email: <a href="{% url 'login' %}">Log-in </a>to view.</p>
-    {% else %}
-        <p>Email: {{ app_user.email }}</p>
-{#        {% if user.id != profile.pk %}#}
-{#            #}
-{#        {% endif %}#}
-    {% endif %}
-    <p>Date Joined: {{ app_user.date_joined }}</p>
-    {% if app_user == user %}
-        <a href="{% url 'profile_edit' profile.pk %}">Edit profile</a>
-        {% else %}
-        <a href="{% url 'view_messages' pk=profile.pk %}">Message user</a>
-    {% endif %}
-
+    <head>
+        <title>Profile</title>
+        <link rel="stylesheet" href="{% static 'css/profile_detail.css' %}">
+    </head>
+    <h1 class="page-title">Profile Details</h1>
+    <div class="profile-info">
+        <img src="{% static profile.profile_picture %}" alt="Profile Picture" class="profile-picture">
+        <div class="profile-text">
+            <h2 class="profile-name">{{ profile.first_name }} {{ profile.last_name }}</h2>
+            <p class="profile-age">Age: {{ profile.age }}</p>
+            <p class="profile-bio">Bio: {{ profile.bio }}</p>
+            <p class="profile-city">City: {{ profile.city }}</p>
+            {% if not user.is_authenticated %}
+                <p class="profile-email">Email: <a href="{% url 'login' %}">Log-in </a>to view.</p>
+            {% else %}
+                <p class="profile-email">Email: {{ app_user.email }}</p>
+            {% endif %}
+            <p class="profile-date">Date Joined: {{ app_user.date_joined }}</p>
+            {% if app_user == user %}
+                <a href="{% url 'profile_edit' profile.pk %}" class="btn btn-primary">Edit profile</a>
+            {% else %}
+                <a href="{% url 'view_messages' pk=profile.pk %}" class="btn btn-primary">Message user</a>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

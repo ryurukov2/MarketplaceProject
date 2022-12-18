@@ -1,21 +1,26 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block content %}
+    <head>
+        <title>Messages</title>
+        <link rel="stylesheet" href="{% static 'css/view_messages.css' %}">
+    </head>
+    <body>
     <ul>
         {% for message in thread.messages.all %}
-            <li>
-                {% if message.sender.user_id == user.id %}
-                    <p><b>{{ message.sender.first_name }} {{ message.sender.last_name }}: {{ message.message_body }}</b>
-                    </p>
-                    <p>Sent: {{ message.timestamp }}</p>
-                {% else %}
-                    <p>{{ message.sender.first_name }} {{ message.sender.last_name }}: {{ message.message_body }}</p>
-                    <p>Sent: {{ message.timestamp }}</p>
-                {% endif %}
+        <li class="message-container {% if message.sender.user_id == user.id %}mine{% else %}others{% endif %}">
+            {% if message.sender.user_id == user.id %}
+                <a href="{% url 'profile detail' pk=user.id %}"><img src="{% static user.profile.profile_picture  %}" alt="" class="message-preview"></a>
+                <div class="message-content">{{ message.message_body }}</div>
+            {% else %}
 
-            </li>
+                <div class="message-content">{{ message.message_body }}</div>
+                <a href="{% url 'profile detail' pk=message.sender.user_id %}"><img src="{% static message.sender.profile_picture %}" alt="" class="message-preview"></a>
+            {% endif %}
+            <p class="message-timestamp">Sent: {{ message.timestamp }}</p>
+        </li>
         {% endfor %}
     </ul>
 {% include 'web_app/message_form.html' %}
-
+</body>
 {% endblock %}

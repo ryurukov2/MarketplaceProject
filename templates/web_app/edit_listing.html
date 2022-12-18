@@ -1,17 +1,35 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block content %}
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        {{ product_images.management_form }}
-        {% for product_image_form in product_images|slice:"3" %}
-            {{ product_image_form.as_p }}
-        {% endfor %}
-        <button type="submit">Save</button>
-    </form>
-    <form action="{% url 'listing delete' pk=object.id %}" method="post">
-    {% csrf_token %}
-        <button type="submit">DELETE LISTING</button>
-    </form>
+    <head>
+    <title>Edit Listing</title>
+        <link rel="stylesheet" href="{% static 'css/edit_listing.css' %}">
+    </head>
+    <h1 class="page-title">Edit Listing</h1>
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+<div class="form-group">
+{{ form.title.label_tag }} {{ form.title }}
+</div>
+<div class="form-group">
+{{ form.price.label_tag }} {{ form.price }}
+</div>
+<div class="form-group">
+{{ form.description.label_tag }} {{ form.description }}
+</div>
+<div class="form-group">
+{{ form.category.label_tag }} {{ form.category }}
+</div>
+{{ product_images.management_form }}
+{% for product_image_form in product_images|slice:"3" %}
+{{ product_image_form.as_p }}
+{% endfor %}
+<div class="form-group">
+<button type="submit" class="btn btn-primary">Save</button>
+</div>
+</form>
+<form action="{% url 'listing delete' pk=object.id %}" method="post">
+{% csrf_token %}
+<button type="submit" class="btn btn-danger">DELETE LISTING</button>
+</form>
 {% endblock %}

@@ -2,38 +2,37 @@
 {% load static %}
 {% block content %}
     <head>
-        <meta charset="UTF-8">
-        <title>It works!</title>
+        <title>Markerplace</title>
+        <link rel="stylesheet" href="{% static 'css/index.css' %}">
     </head>
-    <body>
-    <form method="GET" action="{% url 'search' %}">
-        <label>
-            <input type="text" name="q" placeholder="Search listings">
-        </label>
-        <button type="submit">Search</button>
-    </form>
-    <ul>
+    <div class="search-form">
+        <form method="GET" action="{% url 'search' %}">
+            <label>
+                <input type="text" name="q" placeholder="Search listings">
+            </label>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+    <ul class="listings-container">
         {% for listing in object_list %}
-            {% with listing.productimage_set.first as product_image %}
-                <a href="{% url 'listing detail' pk=listing.id %}"><img class='image_preview' src=" {% static product_image.product_photos %}" alt=""></a>
-            {% endwith %}
-            {% if listing.seller.user == request.user %}
-                <b>
-                    <li> {{ listing.title }} {{ listing.price }} </li>
-                    {{ listing.seller.first_name }}
-                    from {{ listing.seller.city }}
-                    <a href="{% url 'listing detail' pk=listing.id %}">View</a>
-                    <a href="{% url 'listing edit' pk=listing.id %}">Edit</a>
-                </b>
-            {% else %}
-                <li> {{ listing.title }} {{ listing.price }} </li>
-                {{ listing.seller.first_name }}
-                from {{ listing.seller.city }}
-                <a href="{% url 'listing detail' pk=listing.id %}">View</a>
-            {% endif %}
-
-
+            <li class="listing-item">
+                {% with listing.productimage_set.first as product_image %}
+                    <a href="{% url 'listing detail' pk=listing.id %}"><img class='product-photo'
+                                                                            src="{% static product_image.product_photos %}"
+                                                                            alt="Photo"></a>
+                {% endwith %}
+                <div class="listing-info">
+                    <h2 class="listing-title">{{ listing.title }}</h2>
+                    <p class="listing-price">{{ listing.price }} BGN</p>
+                    <p class="listing-seller">{{ listing.seller.first_name }} from {{ listing.seller.city }}</p>
+                    {% if listing.seller.user == request.user %}
+                        <a href="{% url 'listing detail' pk=listing.id %}" class="btn btn-primary">View</a>
+                        <a href="{% url 'listing edit' pk=listing.id %}" class="btn btn-secondary">Edit</a>
+                    {% else %}
+                        <a href="{% url 'listing detail' pk=listing.id %}" class="btn btn-primary">View</a>
+                    {% endif %}
+                </div>
+            </li>
         {% endfor %}
     </ul>
-    </body>
 {% endblock %}
