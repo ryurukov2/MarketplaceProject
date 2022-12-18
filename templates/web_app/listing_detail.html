@@ -22,8 +22,10 @@
         </div>
         <div class="profile-details">
             <h1>Seller details:</h1>
-            <a href="{% url 'profile detail' pk=object.seller_id %}"><img
-                    src="{% static object.seller.profile_picture %}" alt="Profile Picture" class="profile-pic"></a>
+            <a href="{% url 'profile detail' pk=object.seller_id %}">{% if object.seller.profile_picture %}<img
+                    src="{% static object.seller.profile_picture %}" alt="" class="profile-pic">{% else %}<img
+                    src="{% static 'profile_pictures/default_profile_photo.jpeg' %}" alt=""
+                    class="profile-pic">{% endif %}</a>
             <div>
                 <h2 class="seller-name">{{ object.seller.first_name }}</h2>
                 <p>City: {{ object.seller.city }}</p>

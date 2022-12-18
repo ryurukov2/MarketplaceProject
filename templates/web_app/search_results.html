@@ -1,21 +1,33 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block content %}
-    <form method="GET" action="{% url 'search' %}">
+    <head>
+        <title>Search results</title>
+        <link rel="stylesheet" href="{% static 'css/search_results.css' %}">
+    </head>
+    <body>
+    <form method="GET" action="{% url 'search' %}" class="search-form">
         <label>
-            <input type="text" name="q" placeholder="Search listings">
+            <input type="text" name="q" placeholder="{{ request.GET.q }}" class="search-input">
         </label>
-        <button type="submit">Search</button>
+        <button type="submit" class="search-button">Search</button>
     </form>
     {% for listing in listings %}
         <div class="listing">
-            <h3><a href="{% url 'listing detail' pk=listing.id %}">{{ listing.title }}</a> - {{ listing.price }}</h3>
+            <h3><a href="{% url 'listing detail' pk=listing.id %}" class="listing-title">{{ listing.title }}</a>
+                - {{ listing.price }}</h3>
             <p>{{ listing.description }}</p>
             {% with listing.productimage_set.first as product_image %}
-                <a href="{% url 'listing detail' pk=listing.id %}"><img class='image_preview'
-                                                                        src=" {% static product_image.product_photos %}"
-                                                                        alt=""></a>
+
+                <a href="{% url 'listing detail' pk=listing.id %}">{% if product_image.product_photos %}
+                    <img class='product-photo'
+                         src="{% static product_image.product_photos %}"
+                         alt="">{% else %}<img class='product-photo'
+                                               src="{% static 'product_photos/default_product_image.png' %}"
+                                               alt="">{% endif %}</a>
             {% endwith %}
         </div>
     {% endfor %}
+
+    </body>
 {% endblock %}

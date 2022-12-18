@@ -8,19 +8,27 @@
     <body>
     <ul>
         {% for message in thread.messages.all %}
-        <li class="message-container {% if message.sender.user_id == user.id %}mine{% else %}others{% endif %}">
-            {% if message.sender.user_id == user.id %}
-                <a href="{% url 'profile detail' pk=user.id %}"><img src="{% static user.profile.profile_picture  %}" alt="" class="message-preview"></a>
-                <div class="message-content">{{ message.message_body }}</div>
-            {% else %}
+            <li class="message-container {% if message.sender.user_id == user.id %}mine{% else %}others{% endif %}">
+                {% if message.sender.user_id == user.id %}
+                    <a href="{% url 'profile detail' pk=user.id %}">{% if user.profile.profile_picture %}
+                        <img src="{% static user.profile.profile_picture %}" alt="" class="message-preview"> {% else %}
+                        <img src="{% static 'profile_pictures/default_profile_photo.jpeg' %}" alt=""
+                             class="message-preview">{% endif %}</a>
+                    <div class="message-content">{{ message.message_body }}</div>
+                {% else %}
 
-                <div class="message-content">{{ message.message_body }}</div>
-                <a href="{% url 'profile detail' pk=message.sender.user_id %}"><img src="{% static message.sender.profile_picture %}" alt="" class="message-preview"></a>
-            {% endif %}
-            <p class="message-timestamp">Sent: {{ message.timestamp }}</p>
-        </li>
+                    <div class="message-content">{{ message.message_body }}</div>
+                    <a href="{% url 'profile detail' pk=message.sender.user_id %}">
+                        {% if message.sender.profile_picture %}
+                            <img src="{% static message.sender.profile_picture %}" alt=""
+                                 class="message-preview"> {% else %}
+                            <img src="{% static 'profile_pictures/default_profile_photo.jpeg' %}" alt=""
+                                 class="message-preview">{% endif %}</a>
+                {% endif %}
+                <p class="message-timestamp">Sent: {{ message.timestamp }}</p>
+            </li>
         {% endfor %}
     </ul>
-{% include 'web_app/message_form.html' %}
-</body>
+    {% include 'web_app/message_form.html' %}
+    </body>
 {% endblock %}

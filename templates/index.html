@@ -17,9 +17,13 @@
         {% for listing in object_list %}
             <li class="listing-item">
                 {% with listing.productimage_set.first as product_image %}
-                    <a href="{% url 'listing detail' pk=listing.id %}"><img class='product-photo'
-                                                                            src="{% static product_image.product_photos %}"
-                                                                            alt="Photo"></a>
+
+                    <a href="{% url 'listing detail' pk=listing.id %}">{% if product_image.product_photos %}
+                        <img class='product-photo'
+                             src="{% static product_image.product_photos %}"
+                             alt="">{% else %}<img class='product-photo'
+                                                   src="{% static 'product_photos/default_product_image.png' %}"
+                                                   alt="">{% endif %}</a>
                 {% endwith %}
                 <div class="listing-info">
                     <h2 class="listing-title">{{ listing.title }}</h2>
