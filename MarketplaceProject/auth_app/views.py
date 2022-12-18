@@ -14,10 +14,6 @@ class SignUpView(views.CreateView):
 
     success_url = reverse_lazy('index')
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['form'] = SignUpForm()
-    #     return context
     def form_valid(self, form):
         result = super().form_valid(form)
         login(self.request, self.object)
@@ -40,6 +36,7 @@ class SignInView(auth_views.LoginView):
 class SignOutView(auth_views.LogoutView):
     template_name = 'auth_app/sign-out.html'
 
+
 class ProfileDetailView(DetailView):
     model = Profile
     context_object_name = 'profile'
@@ -55,18 +52,9 @@ class ProfileDetailView(DetailView):
         context['user'] = self.request.user
         return context
 
-    # moved logic to template
-    # def get(self, request, *args, **kwargs):
-    #     self.object = self.get_object()
-    #     if self.object.user != request.user:
-    #         return redirect('index')
-    #
-    #     context = self.get_context_data(object=self.object)
-    #     return self.render_to_response(context)
 
 class ProfileUpdateView(UpdateView):
     model = Profile
-    # fields = ['first_name', 'last_name', 'age', 'city', 'bio', 'profile_picture', ]
     form_class = ProfileUpdateForm
     template_name = 'web_app/profile_form.html'
 
@@ -81,5 +69,3 @@ class ProfileUpdateView(UpdateView):
 
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
-
-

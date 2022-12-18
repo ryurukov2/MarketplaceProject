@@ -41,74 +41,7 @@ class ListingImageUploadView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-# class ListingEditView(UpdateView):
-#     model = Listing
-#     # fields = ['first_name', 'last_name', 'age', 'city', 'bio', 'profile_picture', ]
-#     form_class = ListingWithImagesForm
-#     template_name = 'web_app/edit_listing.html'
-#
-#     def __init__(self):
-#         super().__init__()
-#         self.object = None
-#
-#     def get(self, request, *args, **kwargs):
-#         self.object = self.get_object()
-#
-#         # Check if the logged-in user is the owner of the profile that is being edited
-#         if self.object.seller.user != request.user:
-#             return redirect('listing detail', pk=self.object.id)
-#
-#         context = self.get_context_data(object=self.object)
-#         return self.render_to_response(context)
 
-# LoginRequiredMixin
-
-# def addNoteView(request):
-#     if request.method == "POST":
-#         # images will be in request.FILES
-#         form = FullListingForm(request.POST or None, request.FILES or None)
-#         files = request.FILES.getlist('product_photos')
-#         if form.is_valid():
-#             user = request.user
-#             title = form.cleaned_data['title']
-#             price = form.cleaned_data['price']
-#             description = form.cleaned_data['description']
-#             category = form.cleaned_data['category']
-#             listing_obj = Listing.objects.create(seller=user,
-#                                                  title=title,
-#                                                  description=description,
-#                                                  category=category,
-#                                                  price=price
-#                                                  )
-#             for f in files:
-#                 ProductImage.objects.create(listing=listing_obj, image=f)
-#         else:
-#             print("Form invalid")
-
-# working well for one image per listing, but not sufficient
-# class ListingCreateView(LoginRequiredMixin, CreateView):
-#     model = Listing
-#     # fields = ['title', 'price', 'description', 'category', 'product_photos',]
-#     template_name = 'web_app/listing_form.html'
-#     form_class = ListingForm
-#
-#     # success_url =
-
-#     def form_valid(self, form):
-#         # Set the seller field to the currently logged in user (Profile)
-#         form.instance.seller = Profile.objects.get(user_id=self.request.user.id)
-#         return super().form_valid(form)
-
-# def form_valid(self, form):
-#     form.instance.seller = Profile.objects.get(user_id=self.request.user.id)
-#     # Save the form data to the database
-#     response = super().form_valid(form)
-#     # Get the primary key of the newly created listing
-#     listing_pk = self.object.pk
-#     # Use the reverse function to generate the URL for the listing detail view
-#     listing_detail_url = reverse('listing detail', kwargs={'pk': listing_pk})
-#     # Return a redirect response to the listing detail URL
-#     return redirect(listing_detail_url)
 
 
 class ListingDetailView(DetailView):
@@ -124,19 +57,6 @@ class ListingDetailView(DetailView):
         return context
 
 
-# class EditListingView(View):
-#     def get(self, request, pk):
-#         listing = get_object_or_404(Listing, pk=pk)
-#         form = ListingForm(instance=listing)
-#         return render(request, 'web_app/edit_listing.html', {'form': form, 'listing': listing})
-#
-#     def post(self, request, pk):
-#         listing = get_object_or_404(Listing, pk=pk)
-#         form = ListingForm(request.POST, instance=listing)
-#         if form.is_valid():
-#             listing = form.save()
-#             return redirect(listing.get_absolute_url())
-#         return render(request, 'web_app/edit_listing.html', {'form': form, 'listing': listing})
 
 
 class ListingImageUpdateView(UpdateView):

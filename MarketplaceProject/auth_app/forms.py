@@ -40,12 +40,6 @@ class AppUserCreationForm(forms.ModelForm):
         return user
 
 
-# class AppUserForm(forms.ModelForm):
-#     class Meta:
-#         model = AppUser
-#         fields = ('email', 'is_staff', 'is_superuser', 'groups', 'user_permissions')
-#         field_classes = {'email': forms.EmailField}
-#         USERNAME_FIELD = 'email'
 class SignUpForm(auth_forms.UserCreationForm):
     first_name = forms.CharField()
     last_name = forms.CharField()
