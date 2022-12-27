@@ -58,7 +58,6 @@ class SignUpForm(auth_forms.UserCreationForm):
     # save with data for profile
     def save(self, commit=True):
         user = super().save(commit=commit)
-        print('from save')
         profile = Profile(
             first_name=self.cleaned_data['first_name'],
             last_name=self.cleaned_data['last_name'],
